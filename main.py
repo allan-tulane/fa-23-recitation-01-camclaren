@@ -8,11 +8,11 @@ import time
 ###
 
 def linear_search(mylist, key):
-	""" done. """
-	for i,v in enumerate(mylist):
-		if v == key:
-			return i
-	return -1
+  """ done. """
+  for i,v in enumerate(mylist):
+    if v == key:
+      return i
+  return -1
 
 
 def binary_search(mylist, key):
@@ -20,7 +20,20 @@ def binary_search(mylist, key):
 	return _binary_search(mylist, key, 0, len(mylist)-1)
 
 def _binary_search(mylist, key, left, right):
-	"""
+  
+  if left > right:
+      return -1
+  
+  mid = (left + right) // 2
+
+  if key == mylist[mid]:
+    return mid
+  elif key < mylist[mid]:
+    return _binary_search(mylist, key, left, mid - 1)
+  else:
+    return _binary_search(mylist, key, mid + 1, right)
+	
+  """
 	Recursive implementation of binary search.
 
 	Params:
@@ -31,12 +44,7 @@ def _binary_search(mylist, key, left, right):
 
 	Returns:
 	  index of key in mylist, or -1 if not present.
-	"""
-	### TODO
-
-	###
-
-
+   """
 
 
 def time_search(search_fn, mylist, key):
@@ -58,8 +66,11 @@ def time_search(search_fn, mylist, key):
 	  search function on this input.
 	"""
 	### TODO
+	start_time = time.time()
+	search_fn(mylist, key)
+	end_time = time.time()
 
-	###
+	return (end_time - start_time) * 1000
 
 def compare_search(sizes=[1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7]):
 	"""
@@ -77,8 +88,12 @@ def compare_search(sizes=[1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7]):
 	  for each method to run on each value of n
 	"""
 	### TODO
+	results = []
 
-	###
+	for n in sizes:
+		listz = list(range(int(n)))
+		results.append((n, time_search(linear_search, listz, -1), time_search(binary_search, listz, -1)))
+	return results
 
 def print_results(results):
 	""" done """
@@ -87,3 +102,4 @@ def print_results(results):
 							floatfmt=".3f",
 							tablefmt="github"))
 
+print_results(compare_search())
